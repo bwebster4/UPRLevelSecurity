@@ -4,3 +4,17 @@ h1 {
 h2 {
 	text-align: center;
 }
+input[type=submit] {
+	margin: 20px;
+	border-color: blue;
+	background: white;
+	color: black;
+	border-radius: 4px;
+	text-align: center;
+	min-width: 100px;
+}
+input[type=submit]:focus {
+	border-color: blue;
+	background: blue;
+	color: white;
+}

@@ -16,9 +16,21 @@
 	<div class="row col-md-12">
 		<div name="video-div" class="col-md-8">
 			<h2>Live Video</h2>
+			{% if displayVideo %}
 			<div class="embed-responsive embed-responsive-16by9">
 		    	<img class="embed-responsive-item" width="640" height="480" src="{{ url_for('video_feed') }}">
 		    </div>
+
+		   	<form action="/" method="get">
+		    	<input type="hidden" name="displayVideo" value="False">
+		    	<input type="submit" value="Stop Video">
+		    </form>
+		    {% else %}
+		    <form action="/" method="get">
+		    	<input type="hidden" name="displayVideo" value="True">
+		    	<input type="submit" value="Start Video">
+		    </form>
+		    {% endif %}
 		</div>
 
 		<div class="col-md-4">THIS IS WHERE EVERYTHING ELSE GOES</div>

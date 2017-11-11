@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 application = Flask(__name__)
 app = application # AWS Beanstalk requires it to be called application, but we can just use app for everything else because it's shorter
 
@@ -8,7 +8,11 @@ Camera = import_module('camera_opencv').Camera
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+	displayVideo = False
+	if request.args.get('displayVideo') and request.args.get('displayVideo') == "True":
+		displayVideo = True
+
+	return render_template('home.html', displayVideo=displayVideo)
 
 def gen(camera):
     """Video streaming generator function."""

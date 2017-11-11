@@ -2,11 +2,27 @@
 <html>
 <head>
 	<title>UPR Level Security</title>
+	
+
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/home.css') }}">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 </head>
 <body>
 
-<h1>UPR Level Security Monitoring Application</h1>
-<h2>Boston University Senior Design 2017-2018</h2>
+<div class="container-fluid">
+	<h1>UPR Level Security Monitoring Application</h1>
+	<h2>Boston University Senior Design 2017-2018</h2>
+	<div class="row col-md-12">
+		<div name="video-div" class="col-md-8">
+			<h2>Live Video</h2>
+			<div class="embed-responsive embed-responsive-16by9">
+		    	<img class="embed-responsive-item" width="640" height="480" src="{{ url_for('video_feed') }}">
+		    </div>
+		</div>
 
+		<div class="col-md-4">THIS IS WHERE EVERYTHING ELSE GOES</div>
+	</div>
+</div>
 </body>
 </html>

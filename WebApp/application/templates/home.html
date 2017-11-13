@@ -20,7 +20,9 @@
 					<div id='alert-list' class='col-md-12'>
 						<h2 style='padding-top: 10px; color: #88bbd6'>Alert Bar</h2>
 						<ul>
-							<li>Sample Alert</li>
+							{% for alert in alerts %}
+							<li>{{alert.header}}: {{alert.information}}</li>
+							{% endfor %}
 						</ul>
 					</div>
 				</div>

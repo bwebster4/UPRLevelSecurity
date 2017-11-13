@@ -11,10 +11,15 @@ def home():
 
 @app.route("/api/alert", methods=['POST'])
 def create_alert():
-    if not request.json or not 'title' in request.json:
+    if not request.json or not 'title' in request.json or not 'text' in request.json:
         abort(400)
     alert = Alert(title=request.json['title'], text=request.json['text'])
-    db.session.add(alert)
-    db.session.commit()
+    
+    try:
+        db.session.add(alert)
+        db.session.commit()
+    except:
+        db.session.rollback()
+        abort(400)
 
-    return jsonify(alert), 201
+    return jsonify(alert.serialize()), 201

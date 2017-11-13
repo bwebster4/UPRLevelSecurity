@@ -32,6 +32,12 @@ To run the webapp:
 `flask run`
 
 
+To hit the alert creation API:
+
+`curl -i -H "Content-Type: application/json" -X POST -d '{"title":"Test Alert!", "text":"some other test thing"}' http://localhost:5000/api/alert`
+
+You must make a post request to the API at the url IP_ADDRESS/api/alert with the json containing both a title and a text attribute
+
 Useful Links:
 Doc page for a minimal Flask App, has a little bit of information on just about everything, good place to start: http://flask.pocoo.org/docs/0.12/quickstart/#a-minimal-application
 

@@ -2,6 +2,7 @@ Repository for senior design project
 
 WebApp in WebApp folder
 Commands to set up the WebApp (all to be run in WebApp directory):
+```
 pip install virtualenv
 virtualenv venv
 . venv/bin/activate
@@ -25,9 +26,10 @@ db.session.add(alert)
 db.session.commit()
 
 quit()
-
+```
 To run the webapp:
-flask run
+
+`flask run`
 
 
 Useful Links:

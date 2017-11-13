@@ -1,7 +1,7 @@
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, jsonify
 
 from application import app
-from application.models import Alert
+from application.models import Alert, db
 
 @app.route("/")
 def home():

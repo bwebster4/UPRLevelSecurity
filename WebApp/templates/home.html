@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>UPR Level Security</title>
-	
+	<head>
+		<title>UPR Level Security</title>
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/home.css') }}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	</head>
 
-	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/home.css') }}">
-
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-</head>
-<body>
-
-<div class="container-fluid">
-	<h1>UPR Level Security Monitoring Application</h1>
-	<h2>Boston University Senior Design 2017-2018</h2>
-	<div class="row col-md-12">
-		<div name="video-div" class="col-md-8">
-			<h2>Live Video</h2>
-			{% if displayVideo %}
-			<div class="embed-responsive embed-responsive-16by9">
-		    	<img class="embed-responsive-item" width="640" height="480" src="{{ url_for('video_feed') }}">
-		    </div>
-
-		   	<form action="/" method="get">
-		    	<input type="hidden" name="displayVideo" value="False">
-		    	<input type="submit" value="Stop Video">
-		    </form>
-		    {% else %}
-		    <form action="/" method="get">
-		    	<input type="hidden" name="displayVideo" value="True">
-		    	<input type="submit" value="Start Video">
-		    </form>
-		    {% endif %}
+	<body style='background-color: #ccc'>
+		<div class="container-fluid">
+			<h1 id='header'>UPR Level Security Monitoring Application</h1>
+			<div class="row col-md-12">
+				<div class="col-md-8" style="background-color: #ccc">
+					<div id="video-div" class='col-md-12' style="background-color: #fff">
+						<h2 style='padding-top: 10px'>Live Video</h2>
+						<!-- {% if displayVideo %}
+						<div class="embed-responsive embed-responsive-16by9">
+					    	<img class="embed-responsive-item" width="640" height="480" src="{{ url_for('video_feed') }}">
+					    </div>
+					   	<form action="/" method="get">
+					    	<input type="hidden" name="displayVideo" value="False">
+					    	<input type="submit" value="Stop Video">
+					    </form>
+					    {% else %}
+					    <form action="/" method="get">
+					    	<input type="hidden" name="displayVideo" value="True">
+					    	<input type="submit" value="Start Video">
+					    </form>
+					    {% endif %} -->
+						<iframe width = '640' height = '480' src = "http://192.168.0.51:8081/"></iframe>
+					</div>
+				</div>
+				<div id='alert-div' class="col-md-4" style="background-color: #ccc">
+					<div id='alert-list' class='col-md-12' style="background-color: #fff">
+						<h2 style='padding-top: 10px'>Alert Bar</h2>
+						<ul>
+							<li>Sample Alert</li>
+						</ul>
+					</div>
+				</div>
+			</div>
 		</div>
-
-		<div class="col-md-4">THIS IS WHERE EVERYTHING ELSE GOES</div>
-	</div>
-</div>
-</body>
+	</body>
 </html>
+
+<style type="text/css">
+	#header{
+		font: 'Open Sans';
+		margin-bottom: 20px;
+		margin-top: 20px
+	}
+	#alert-list{
+		height: 100%;	
+		box-shadow: 5px 5px 2px #888888;
+	}
+
+	#video-div{
+		height: 100%;
+		box-shadow: 5px 5px 2px #888888;
+	}
+</style>

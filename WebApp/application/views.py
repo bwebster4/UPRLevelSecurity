@@ -16,3 +16,5 @@ def create_alert():
     alert = Alert(title=request.json['title'], text=request.json['text'])
     db.session.add(alert)
     db.session.commit()
+
+    return jsonify(alert), 201

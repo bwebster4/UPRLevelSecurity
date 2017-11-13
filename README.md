@@ -13,9 +13,9 @@ git checkout develop
 pip install -r requirements.txt
 export FLASK_APP=application
 export FLASK_DEBUG=true
-cd application
 pip install -e .
 python
+cd application
 from application.models import db
 db.create_all()
 

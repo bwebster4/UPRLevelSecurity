@@ -13,13 +13,14 @@
 				<div id="video-container" class="col-md-8">
 					<div id="video-div" class='col-md-12'>
 						<h2 style='padding-top: 10px; color: #88bbd6'>Live Video</h2>
-						<iframe id ='stream' src = "http://192.168.0.51:8081/"></iframe>
+						<iframe id ='stream' src = "http://10.192.228.239:8081/"></iframe>
 					</div>
 				</div>
 				<div id='alert-div' class="col-md-4">
+					<h2 style='padding-top: 10px; background-color: #cdcdcd; color: #88bbd6; margin-bottom: 0px'>Alert Bar</h2>
 					<div id='alert-list' class='col-md-12'>
-						<h2 style='padding-top: 10px; color: #88bbd6'>Alert Bar</h2>
-						<ul>
+						<!-- <h2 style='padding-top: 10px; color: #88bbd6'>Alert Bar</h2> -->
+						<ul id = 'alert-ul'>
 							{% for alert in alerts %}
 							<li>{{alert.title}}: {{alert.text}}</li>
 							{% endfor %}
@@ -55,8 +56,9 @@
 	#alert-list{
 		background-color: #cdcdcd;
 		height: 100%;	
+		max-height: 520px;
+		overflow: scroll;
 	}
-
 	#stream{
 		border-width: 0px;
 		width: 100%;

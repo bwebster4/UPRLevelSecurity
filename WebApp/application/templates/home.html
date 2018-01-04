@@ -4,59 +4,80 @@
 		<title>UPR Level Security</title>
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/home.css') }}">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
 	</head>
 
-	<body style='background-color: #e9e9e9'>
+	<body>
 		<div class="container-fluid">
-			<h1 id='header'>UPR Level Security Monitoring Application</h1>
-			<div class="row" styld="margin-right:0px">
+			<div class="row" style='margin-top:10px; margin-left:10px; margin-right:10px'>
+				<div class="col-md-3">
+					<span style="display: inline-block; height: 100%; vertical-align: middle"></span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/ConEd_logo.svg/2000px-ConEd_logo.svg.png" alt="ConEd Logo" width="200" height="40" style="vertical-align: middle">
+				</div>
+				<div class="col-md-6">
+					<span style="font-size:	28px; color: #0696D4; text-align:center; margin-top:15px">UPR Level Security Monitoring Application</span>
+				</div>
+				<div class="col-md-3" style="text-align:center; padding-top:12px">
+					<span style="color: #0696D4;">Hello, Brock Guzman&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<a class="hover" href="https://google.com" style="color: #0696D4">Logout</a>
+				</div>
+			</div>
+			<hr>
+			<div class="row" style="margin-left:10px; margin-right:10px">
+				<div class="col-md-8">
+					<h2 style="color: #0696D4; text-align:center">Live Video</h2>
+					<hr width=50%>
+				</div>
+				<div class="col-md-4">
+					<h2 style="color: #0696D4; text-align:center">Alert Bar</h2>
+					<hr>
+				</div>
+			</div>
+			<div class="row" style="margin-left:10px; margin-right:10px">
 				<div id="video-container" class="col-md-8">
 					<div id="video-div" class='col-md-12'>
-						<h2 style='padding-top: 10px; color: #88bbd6'>Live Video</h2>
-						<iframe id ='stream' src = "http://10.192.228.239:8081/"></iframe>
+						<iframe id ='stream' src = "http://192.168.0.13:8081/"></iframe>
 					</div>
 				</div>
 				<div id='alert-div' class="col-md-4">
-					<h2 style='padding-top: 10px; background-color: #cdcdcd; color: #88bbd6; margin-bottom: 0px'>Alert Bar</h2>
 					<div id='alert-list' class='col-md-12'>
-						<!-- <h2 style='padding-top: 10px; color: #88bbd6'>Alert Bar</h2> -->
-						<ul id = 'alert-ul'>
+						<ul id = 'alert-ul' style='list-style: none; text-align: center; padding: 0px'>
 							{% for alert in alerts %}
-							<li>{{alert.title}}: {{alert.text}}</li>
+							<li style='color: #0696D4;'>{{alert.title}}: {{alert.text}}</li>
 							{% endfor %}
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
+		<div class="container-fluid">
+			<div id="controls"></div>
+		</div>
 	</body>
 </html>
 
 <style type="text/css">
+	body {
+        font-family: 'Open Sans';
+      }
 	#header{
-		font: 'Open Sans';
 		margin-bottom: 20px;
 		margin-top: 20px;
-		color: #88bbd6;
+		color: #0696D4;
 	}
 	#video-container{
-		background-color: #e9e9e9;
 		padding-left: 10px;
 		padding-right: 5px;
 	}
 	#video-div{
-		background-color: #cdcdcd;
 		height: 100%;
 	}
 	#alert-div{
 		padding-left: 5px;
 		padding-right: 10px;
-		background-color: #e9e9e9;
 	}
 	#alert-list{
-		background-color: #cdcdcd;
 		height: 100%;	
-		max-height: 520px;
+		max-height: 500px;
 		overflow: scroll;
 	}
 	#stream{

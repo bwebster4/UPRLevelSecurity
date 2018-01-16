@@ -3,8 +3,9 @@ from flask import Flask, render_template, Response, request, jsonify
 from application import app
 from application.models import Alert, db
 
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def home():
+
     alerts = Alert.query.all()
 
     return render_template('home.html', alerts = alerts)

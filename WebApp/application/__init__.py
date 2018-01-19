@@ -6,4 +6,4 @@ import application.views
 import application.models
 
 if __name__ == "__main__":
-    app.run()
+    application.run()

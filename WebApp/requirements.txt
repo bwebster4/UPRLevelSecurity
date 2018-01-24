@@ -1,4 +1,4 @@
--e git+https://github.com/bwebster4/UPRLevelSecurity.git@4a139a2b1ab11450abc9468bbb39a3207c74e69a#egg=application&subdirectory=WebApp
+-e git+https://github.com/bwebster4/UPRLevelSecurity.git@dc45a4e60d9b9d59379bc342d56d6737b726167c#egg=application&subdirectory=WebApp
 awsebcli==3.12.1
 blessed==1.14.2
 botocore==1.7.43
@@ -18,6 +18,7 @@ MarkupSafe==1.0
 numpy==1.13.3
 opencv-python==3.3.0.10
 pathspec==0.5.0
+PyMySQL==0.8.0
 python-dateutil==2.6.1
 PyYAML==3.12
 requests==2.9.1

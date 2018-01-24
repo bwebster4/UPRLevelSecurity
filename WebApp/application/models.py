@@ -1,7 +1,7 @@
 from application import app
 
 from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://buterrier:ConshredSpybot@seniordesign-dbinstance.cqwafy63ykmq.us-east-1.rds.amazonaws.com/flaskdb'
 db = SQLAlchemy(app)
 
 class Alert(db.Model):
@@ -19,3 +19,7 @@ class Alert(db.Model):
 					"title":self.title,
 					"text":self.text
 				}
+
+# Users
+# Video storage
+# 

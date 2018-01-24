@@ -1,8 +1,4 @@
-from application import app
-
-from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://buterrier:ConshredSpybot@seniordesign-dbinstance.cqwafy63ykmq.us-east-1.rds.amazonaws.com/flaskdb'
-db = SQLAlchemy(app)
+from application import db
 
 class Alert(db.Model):
 	"""docstring for Alert"""

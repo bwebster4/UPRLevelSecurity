@@ -1,7 +1,11 @@
 from flask import Flask, render_template, Response, request, jsonify
 
-from application import app
-from application.models import Alert, db
+from application import db
+import application.models
+
+application = Flask(__name__)
+app = application
+application.debug=True
 
 @app.route("/", methods=['POST', 'GET'])
 def home():
@@ -24,3 +28,8 @@ def create_alert():
         abort(400)
 
     return jsonify(alert.serialize()), 201
+
+
+# This needs to be the last line
+if __name__ == "__main__":
+    application.run()

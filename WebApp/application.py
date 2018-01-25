@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response, request, jsonify
 
 from application import db
-import application.models
+import application.models as models
 
 application = Flask(__name__)
 app = application
@@ -10,7 +10,7 @@ application.debug=True
 @app.route("/", methods=['POST', 'GET'])
 def home():
 
-    alerts = Alert.query.all()
+    alerts = models.Alert.query.all()
 
     return render_template('home.html', alerts = alerts)
 
@@ -18,7 +18,7 @@ def home():
 def create_alert():
     if not request.json or not 'title' in request.json or not 'text' in request.json:
         abort(400)
-    alert = Alert(title=request.json['title'], text=request.json['text'])
+    alert = models.Alert(title=request.json['title'], text=request.json['text'])
     
     try:
         db.session.add(alert)

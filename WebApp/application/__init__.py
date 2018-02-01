@@ -1,9 +1,8 @@
 from flask import Flask
-application = Flask(__name__)
-app = application # AWS Beanstalk requires it to be called application, but we can just use app for everything else because it's shorter
+from flask_sqlalchemy import SQLAlchemy
 
-import application.views
-import application.models
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://buterrier:ConshredSpybot@seniordesign-dbinstance.cqwafy63ykmq.us-east-1.rds.amazonaws.com/flaskdb'
+db = SQLAlchemy(app)
 
-if __name__ == "__main__":
-    application.run()
+# for local db: 'sqlite:///test.db'

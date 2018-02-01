@@ -1,8 +1,4 @@
-from application import app
-
-from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = SQLAlchemy(app)
+from application import db
 
 class Alert(db.Model):
 	"""docstring for Alert"""
@@ -19,3 +15,7 @@ class Alert(db.Model):
 					"title":self.title,
 					"text":self.text
 				}
+
+# Users
+# Video storage
+# 

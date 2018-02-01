@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+	    <title>UPR Level Security</title>
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
+	</head>
+
+  	<body>
+		<div class="container-fluid">
+	    	<div class="row" style='margin-top:10px; margin-left:10px; margin-right:10px; text-align: center'>
+					<div class="col-md-12">
+						<span style="font-size:	28px; color: #0696D4; margin-top:15px">UPR Level Security Monitoring Application</span>
+					</div>
+				</div>
+				<hr>
+			<div class="row" style='margin-top:50px; text-align: center'>
+				<div class="col-md-12">
+					<span style="font-size:	28px; color: #0696D4; margin-top:15px">Account Login</span>
+				</div>
+				<div class="col-md-12" style="margin-top: 20px">
+				    <form action="" method="post">
+				        <input style="margin-bottom:10px; border: 1px solid #ccc; border-radius: 4px; width: 20%; height: 35px" type="text" 
+				        placeholder="Username" name="username" value="{{
+					          request.form.username }}"><br />
+					    <input style="margin-bottom:10px; border: 1px solid #ccc; border-radius: 4px; width: 20%; height: 35px" type="password" 
+					    placeholder="Password" name="password" value="{{
+					          request.form.password }}"><br />
+			        	<input style="margin-bottom:10px" class="btn btn-info" type="submit" value="Login">
+			    	</form>
+			    </div>
+			    <div class="col-md-12">
+			      	{% if error %}
+			        	<p class="error"><strong>Error:</strong> {{ error }}
+			      	{% endif %}
+			    </div>
+		    </div>
+	    </div>
+  	</body>
+</html>
+
+<style type="text/css">
+	::-webkit-input-placeholder {
+   		text-align: center;
+	}
+
+	:-moz-placeholder {
+	   text-align: center;  
+	}
+
+	::-moz-placeholder {
+	   text-align: center;  
+	}
+
+	:-ms-input-placeholder {  
+	   text-align: center; 
+	}
+</style>

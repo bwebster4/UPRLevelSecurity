@@ -9,16 +9,17 @@
 
 	<body>
 		<div class="container-fluid">
-			<div class="row" style='margin-top:10px; margin-left:10px; margin-right:10px'>
+			<div class="row" style='margin-top:10px; margin-left:10px; margin-right:10px; display: flex;'>
 				<div class="col-md-3">
 					<span style="display: inline-block; height: 100%; vertical-align: middle"></span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/ConEd_logo.svg/2000px-ConEd_logo.svg.png" alt="ConEd Logo" width="200" height="40" style="vertical-align: middle">
 				</div>
-				<div class="col-md-6">
-					<span style="font-size:	28px; color: #0696D4; text-align:center; margin-top:15px">UPR Level Security Monitoring Application</span>
+				<div class="col-md-5" style="display: table; height: 40px;">
+					<span style="font-size:	24px; color: #0696D4; text-align:center; display: table-cell; vertical-align: middle;">UPR Level Security Monitoring Application</span>
 				</div>
-				<div class="col-md-3" style="text-align:center; padding-top:12px">
-					<span style="color: #9facbd">Hello, Brock Guzman&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<a class="hover" href="https://google.com" style="color: #9facbd">Logout</a>
+				<div class="col-md-4" style="position:relative; display: table; height: 40px">
+					<a class="hover" href="{{ url_for('control') }}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Remote Control</a>
+					<a class="hover" href="{{ url_for('records') }}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Full Records</a>
+					<a class="hover" href="{{ url_for('login') }}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Logout</a>
 				</div>
 			</div>
 			<hr>
@@ -48,9 +49,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="container-fluid">
-			<div id="controls"></div>
 		</div>
 	</body>
 </html>

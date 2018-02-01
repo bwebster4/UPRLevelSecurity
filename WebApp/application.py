@@ -1,10 +1,9 @@
 from flask import Flask, render_template, Response, request, jsonify
 
-from application import db
+from application import db, app
 import application.models as models
 
-application = Flask(__name__)
-app = application
+application = app
 application.debug=True
 
 @app.route("/", methods=['POST', 'GET'])

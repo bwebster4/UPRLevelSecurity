@@ -1,4 +1,5 @@
 from application import db
+from sqlalchemy.sql import func
 
 class Alert(db.Model):
 	"""docstring for Alert"""
@@ -6,8 +7,8 @@ class Alert(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(80), unique=False, nullable=False)
 	text = db.Column(db.String(240), unique=False, nullable=False)
-	timestamp = db.Column(db.DateTime, unique=False, nullable=False)
-	video_ref = db.Column(db.Integer, primary_key=True)
+	timestamp = db.Column(db.DateTime, unique=False, nullable=False, server_default=func.now())
+	video_ref = db.Column(db.String(240), unique=False, nullable=True)
 
 
 	def __repr__(self):

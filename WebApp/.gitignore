@@ -4,3 +4,5 @@
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 *.pyc
+.DS_Store
+*.egg-info

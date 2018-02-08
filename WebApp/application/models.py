@@ -8,7 +8,7 @@ class Alert(db.Model):
 	title = db.Column(db.String(80), unique=False, nullable=False)
 	text = db.Column(db.String(240), unique=False, nullable=False)
 	timestamp = db.Column(db.DateTime, unique=False, nullable=False, server_default=func.now())
-	video_ref = db.Column(db.String(240), unique=False, nullable=True)
+	video_ref = db.Column(db.Integer, nullable = True)
 
 
 	def __repr__(self):

@@ -36,5 +36,21 @@ class User(db.Model):
 	username = db.Column(db.String(80), unique=False, nullable=False)
 	password = db.Column(db.String(80), unique=False, nullable=False)
 
+	def __init__(self, username, password):
+		self.username = username
+		self.password = password
+
+	def is_authenticated(self):
+		return True
+
+	def is_active(self):
+		return True
+
+	def is_anonymous(self):
+		return False
+
+	def get_id(self):
+		return str(self.id)
+
 	def __repr__(self):
 		return '<Username: {0}, Password: {1}>'.format(self.username, self.password)

@@ -1,8 +1,7 @@
--e git+https://github.com/bwebster4/UPRLevelSecurity.git@2d043fad835dcac3c0bb85ca73d15aa59e3e2317#egg=application&subdirectory=WebApp
-awsebcli==3.12.1
+awsebcli==3.12.2
 blessed==1.14.2
 boto3==1.5.25
-botocore==1.8.39
+botocore==1.8.41
 cement==2.8.2
 click==6.7
 colorama==0.3.7
@@ -20,7 +19,7 @@ jmespath==0.9.3
 MarkupSafe==1.0
 numpy==1.13.3
 opencv-python==3.3.0.10
-pathspec==0.5.0
+pathspec==0.5.5
 PyMySQL==0.8.0
 python-dateutil==2.6.1
 PyYAML==3.12
@@ -32,5 +31,5 @@ SQLAlchemy==1.1.15
 tabulate==0.7.5
 termcolor==1.1.0
 wcwidth==0.1.7
-websocket-client==0.44.0
+websocket-client==0.46.0
 Werkzeug==0.12.2

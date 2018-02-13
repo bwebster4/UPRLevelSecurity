@@ -7,6 +7,7 @@ import application.models as models
 
 application = app
 application.debug=True
+app.secret_key = 'super secret key'
 
 VIDEO_FORMAT = ".mp4"
 
@@ -118,6 +119,5 @@ def create_alert():
 
 # This needs to be the last line
 if __name__ == "__main__":
-    app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
     application.run()

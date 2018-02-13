@@ -17,8 +17,8 @@
 					<span style="font-size:	24px; color: #0696D4; text-align:center; display: table-cell; vertical-align: middle;">UPR Level Security Monitoring Application</span>
 				</div>
 				<div class="col-md-4" style="position:relative; display: table; height: 40px">
-					<a class="hover" href="{{ url_for('control')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Remote Control</a>
 					<a class="hover" href="{{ url_for('records')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Full Records</a>
+					<a class="hover" href="{{ url_for('control')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Remote Control</a>
 					<a class="hover" href="{{ url_for('logout')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Logout</a>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 					<hr width=50%>
 				</div>
 				<div class="col-md-4">
-					<h2 style="color: #0696D4; text-align:center">Alert Bar</h2>
+					<h2 style="color: #0696D4; text-align:center">Alert List</h2>
 					<hr>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 					<div id='alert-list' class='col-md-12'>
 						<ul id = 'alert-ul' style='list-style: none; text-align: left; padding: 0px'>
 							{% for alert in alerts | reverse %}
-							<li style='color: #9facbd;'>{{alert.title}}: {{alert.text}}</li>
+							<li style='padding-bottom: 5px; padding-top: 5px; padding-left: 5px'>{{alert.title}}: {{alert.text}}</li>
 							{% endfor %}
 						</ul>
 					</div>
@@ -84,4 +84,5 @@
 		height: 480px;
 		margin-bottom: 5px;
 	}
+	li:nth-child(odd) { background: #d3d3d3; }
 </style>

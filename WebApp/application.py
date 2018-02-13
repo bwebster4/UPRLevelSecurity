@@ -82,6 +82,7 @@ def control():
     return render_template('control.html')
 
 
+@app.route("/download_video/<video_id>", methods=['POST', 'GET'])
 def download_video(video_id):
     video = models.Video.query.filter_by(id=video_id).first()
     s3 = boto3.client('s3')
@@ -97,7 +98,8 @@ def download_video(video_id):
 @app.route("/records", methods=['POST', 'GET'])
 @login_required
 def records():
-    return render_template('records.html')
+    alerts = models.Alert.query.all()
+    return render_template('records.html', alerts = alerts)
 
 
 #API for receiving alerts

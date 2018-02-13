@@ -42,7 +42,7 @@
 				<div id='alert-div' class="col-md-4">
 					<div id='alert-list' class='col-md-12'>
 						<ul id = 'alert-ul' style='list-style: none; text-align: left; padding: 0px'>
-							{% for alert in alerts %}
+							{% for alert in alerts | reverse %}
 							<li style='color: #9facbd;'>{{alert.title}}: {{alert.text}}</li>
 							{% endfor %}
 						</ul>

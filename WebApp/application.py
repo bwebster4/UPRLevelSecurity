@@ -1,10 +1,13 @@
 from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
+import boto3
 
-from application import db, app
+from application import db, app, S3_BUCKET_NAME
 import application.models as models
 
 application = app
 application.debug=True
+
+VIDEO_FORMAT = ".mp4"
 
 #Route for the home page
 @app.route("/", methods=['POST', 'GET'])
@@ -21,6 +24,17 @@ def control():
 
     return render_template('control.html')
 
+
+def download_video(video_id):
+    video = models.Video.query.filter_by(id=video_id).first()
+    s3 = boto3.client('s3')
+    try:
+        s3.BUCKET(S3_BUCKET_NAME).download_file(video.video + VIDEO_FORMAT, video.video + "_temp_local" + VIDEO_FORMAT)
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == "404":
+            print("The object does not exist.")
+        else:
+            raise
 
 #Route for the full records page
 @app.route("/records", methods=['POST', 'GET'])

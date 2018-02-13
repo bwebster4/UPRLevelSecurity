@@ -1,4 +1,4 @@
-from application import db
+from application import db, S3_BUCKET_NAME
 from sqlalchemy.sql import func
 
 class Alert(db.Model):
@@ -29,7 +29,6 @@ class Video(db.Model):
 
 	def __repr__(self):
 		return '<Timestamp: {0}, Video URL: {1}>'.format(self.timestamp, self.video)
-
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

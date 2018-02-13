@@ -28,6 +28,9 @@
 					    placeholder="Password" name="password" value="{{
 					          request.form.password}}"><br />
 			        	<input style="margin-bottom:10px" class="btn btn-info" type="submit" value="Login">
+			        	<a href="{{ url_for('register')}}">
+			        		<input style="margin-bottom:10px" class="btn btn-info" type="button" value="Register">
+			        	</a>
 			    	</form>
 			    </div>
 			    <div class="col-md-12">

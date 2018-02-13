@@ -1,4 +1,4 @@
--e git+https://github.com/bwebster4/UPRLevelSecurity.git@af2772c02717d0588005468801c921f6f3aadfc5#egg=application&subdirectory=WebApp
+-e git+https://github.com/bwebster4/UPRLevelSecurity.git@2d043fad835dcac3c0bb85ca73d15aa59e3e2317#egg=application&subdirectory=WebApp
 awsebcli==3.12.1
 blessed==1.14.2
 boto3==1.5.25
@@ -11,6 +11,7 @@ dockerpty==0.4.1
 docopt==0.6.2
 docutils==0.14
 Flask==0.12.2
+Flask-Login==0.4.1
 Flask-SQLAlchemy==2.3.2
 futures==3.2.0
 itsdangerous==0.24

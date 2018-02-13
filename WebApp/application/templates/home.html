@@ -19,7 +19,7 @@
 				<div class="col-md-4" style="position:relative; display: table; height: 40px">
 					<a class="hover" href="{{ url_for('control')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Remote Control</a>
 					<a class="hover" href="{{ url_for('records')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Full Records</a>
-					<a class="hover" href="{{ url_for('login')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Logout</a>
+					<a class="hover" href="{{ url_for('logout')}}" style="color: #9facbd; display: table-cell; padding-top: 5px; vertical-align: middle; text-align: center">Logout</a>
 				</div>
 			</div>
 			<hr>
@@ -42,7 +42,7 @@
 				<div id='alert-div' class="col-md-4">
 					<div id='alert-list' class='col-md-12'>
 						<ul id = 'alert-ul' style='list-style: none; text-align: left; padding: 0px'>
-							{% for alert in alerts %}
+							{% for alert in alerts | reverse %}
 							<li style='color: #9facbd;'>{{alert.title}}: {{alert.text}}</li>
 							{% endfor %}
 						</ul>

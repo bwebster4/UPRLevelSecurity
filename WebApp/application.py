@@ -1,4 +1,5 @@
-from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
+from flask import Flask, render_template, Response, request, jsonify, redirect, url_for, session, flash, abort, g
+from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 import boto3
 
 from application import db, app, S3_BUCKET_NAME
@@ -9,19 +10,74 @@ application.debug=True
 
 VIDEO_FORMAT = ".mp4"
 
+#-------------------------------------------LOGIN RELATED WORK------------------------------------------
+
+#Login Manager Instatiation
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+#Loading user based on ID
+@login_manager.user_loader
+def load_user(id):
+    return models.User.query.get(int(id))
+
+
+#Register page, might get rid of it but just for ease of use
+@app.route('/register' , methods=['GET','POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+    user = models.User(request.form['username'] , request.form['password'])
+    db.session.add(user)
+    db.session.commit()
+    flash('User successfully registered')
+    return redirect(url_for('login'))
+
+
+#Route for the login page
+@app.route("/login/", methods=['POST', 'GET'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    username = request.form['username']
+    password = request.form['password']
+    registered_user = models.User.query.filter_by(username=username,password=password).first()
+    if registered_user is None:
+        flash('Username or Password is invalid' , 'error')
+        return redirect(url_for('login'))
+    login_user(registered_user)
+    flash('Logged in successfully')
+    return redirect(request.args.get('next') or url_for('home'))
+
+
+#Saving user's profile
+@app.before_request
+def before_request():
+    g.user = current_user
+
+
+#Route for logging out
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login')) 
+
+
+#---------------------------------------END OF LOGIN RELATED WORK-------------------------------------
 #Route for the home page
 @app.route("/", methods=['POST', 'GET'])
+@login_required
 def home():
-
     alerts = models.Alert.query.all()
-
     return render_template('home.html', alerts = alerts)
 
     
 #Route for the robot control page
 @app.route("/control", methods=['POST', 'GET'])
+@login_required
 def control():
-
     return render_template('control.html')
 
 
@@ -38,22 +94,9 @@ def download_video(video_id):
 
 #Route for the full records page
 @app.route("/records", methods=['POST', 'GET'])
+@login_required
 def records():
-
     return render_template('records.html')
-
-
-#Route for the login page
-@app.route("/login/", methods=['POST', 'GET'])
-def login():
-    error = None
-    if request.method == 'POST':
-        # if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-        #     error = 'Invalid Credentials. Please try again.'
-        # else:
-        #     return redirect(url_for('home'))
-        return redirect(url_for('home'))
-    return render_template('login.html', error=error)
 
 
 #API for receiving alerts
@@ -75,4 +118,6 @@ def create_alert():
 
 # This needs to be the last line
 if __name__ == "__main__":
+    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
     application.run()

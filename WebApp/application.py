@@ -86,13 +86,19 @@ def control():
 def download_video(video_id):
     video = models.Video.query.filter_by(id=video_id).first()
     s3 = boto3.client('s3')
+    download_folder = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+    local_filename = video.video + "_temp_local" + VIDEO_FORMAT
+
     try:
-        s3.BUCKET(S3_BUCKET_NAME).download_file(video.video + VIDEO_FORMAT, video.video + "_temp_local" + VIDEO_FORMAT)
+        s3.BUCKET(S3_BUCKET_NAME).download_file(video.video + VIDEO_FORMAT, download_folder + local_filename)
     except botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] == "404":
-            print("The object does not exist.")
+            abort(404)
         else:
             raise
+            
+    return send_from_directory(directory=download_folder, filename=local_filename)
+
 
 #Route for the full records page
 @app.route("/records", methods=['POST', 'GET'])

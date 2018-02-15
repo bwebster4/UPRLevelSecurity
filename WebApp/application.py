@@ -86,12 +86,13 @@ def control():
 @app.route("/download_video/<video_id>", methods=['POST', 'GET'])
 def download_video(video_id):
     video = models.Video.query.filter_by(id=video_id).first()
-    s3 = boto3.client('s3')
+    s3 = boto3.resource('s3')
     download_folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
     local_filename = video.video + "_temp_local" + VIDEO_FORMAT
 
     try:
-        s3.download_file(S3_BUCKET_NAME, video.video + VIDEO_FORMAT, download_folder + local_filename)
+        s3.Bucket(S3_BUCKET_NAME).download_file(video.video + VIDEO_FORMAT, download_folder + local_filename)
+        # s3.download_file(S3_BUCKET_NAME, video.video + VIDEO_FORMAT, download_folder + local_filename)
     except:
         raise
             

@@ -1,6 +1,7 @@
-from flask import Flask, render_template, Response, request, jsonify, redirect, url_for, session, flash, abort, g
+from flask import Flask, render_template, Response, request, jsonify, redirect, url_for, session, flash, abort, g, send_from_directory
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 import boto3
+import os
 
 from application import db, app, S3_BUCKET_NAME
 import application.models as models
@@ -86,16 +87,13 @@ def control():
 def download_video(video_id):
     video = models.Video.query.filter_by(id=video_id).first()
     s3 = boto3.client('s3')
-    download_folder = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+    download_folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
     local_filename = video.video + "_temp_local" + VIDEO_FORMAT
 
     try:
-        s3.BUCKET(S3_BUCKET_NAME).download_file(video.video + VIDEO_FORMAT, download_folder + local_filename)
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == "404":
-            abort(404)
-        else:
-            raise
+        s3.download_file(S3_BUCKET_NAME, video.video + VIDEO_FORMAT, download_folder + local_filename)
+    except:
+        raise
             
     return send_from_directory(directory=download_folder, filename=local_filename)
 

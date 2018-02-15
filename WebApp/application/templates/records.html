@@ -36,7 +36,7 @@
 							{% for alert in alerts | reverse %}
 							<li style='padding-bottom: 5px; padding-top: 5px; padding-left: 5px'>ALERT - {{alert.title}}: {{alert.text}}</li>
 							<li style='padding-bottom: 5px; padding-top: 5px; padding-left: 5px'>TIMESTAMP: {{alert.timestamp}}</li>
-							<li style='padding-bottom: 5px; padding-left: 5px'><a href="{{ url_for('download_video',video_id=alert.video)}}">Download Video</a></li>
+							<li style='padding-bottom: 5px; padding-left: 5px'><a href="{{ url_for('download_video',video_id=alert.video_ref)}}">Download Video</a></li>
 							{% endfor %}
 						</ul>
 					</div>

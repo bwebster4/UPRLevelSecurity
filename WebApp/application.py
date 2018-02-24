@@ -112,7 +112,11 @@ def records():
 def create_alert():
     if not request.json or not 'title' in request.json or not 'text' in request.json:
         abort(400)
-    alert = models.Alert(title=request.json['title'], text=request.json['text'])
+
+    title = request.json['title']
+    text = request.json['text']
+    timestamp = request.json['time']
+    alert = models.Alert(title=title, text=text, timestamp=timestamp)
     
     try:
         db.session.add(alert)

@@ -116,7 +116,8 @@ def create_alert():
     title = request.json['title']
     text = request.json['text']
     timestamp = request.json['time']
-    alert = models.Alert(title=title, text=text, timestamp=timestamp)
+    video_ref = request.json['videoID']
+    alert = models.Alert(title=title, text=text, timestamp=timestamp, video_ref=video_ref)
     
     try:
         db.session.add(alert)

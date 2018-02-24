@@ -24,22 +24,22 @@
 			</div>
 			<hr>
 			<div class="row" style="margin-left:10px; margin-right:10px">
-				<div class="col-md-8">
+				<div class="col-md-7">
 					<h2 style="color: #0696D4; text-align:center">Live Video</h2>
 					<hr width=50%>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-5">
 					<h2 style="color: #0696D4; text-align:center">Alert List</h2>
 					<hr>
 				</div>
 			</div>
 			<div class="row" style="margin-left:10px; margin-right:10px">
-				<div id="video-container" class="col-md-8">
+				<div id="video-container" class="col-md-7">
 					<div id="video-div" class='col-md-12'>
-						<iframe id ='stream' src = "http://192.168.0.13:8081/"></iframe>
+						<iframe id ='stream' src = "http://168.122.128.139:5000//"></iframe>
 					</div>
 				</div>
-				<div id='alert-div' class="col-md-4">
+				<div id='alert-div' class="col-md-5">
 					<div id='alert-list' class='col-md-12'>
 						<ul id = 'alert-ul' style='list-style: none; text-align: left; padding: 0px'>
 							{% for alert in alerts | reverse %}

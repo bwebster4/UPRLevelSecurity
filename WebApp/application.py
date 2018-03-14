@@ -1,5 +1,6 @@
 from flask import Flask, render_template, Response, request, jsonify, redirect, url_for, session, flash, abort, g, send_from_directory
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
+from werkzeug.utils import secure_filename
 import boto3
 import os
 
@@ -116,7 +117,7 @@ def create_alert():
     title = request.json['title']
     text = request.json['text']
     timestamp = request.json['time']
-    video_ref = request.json['videoID']
+    video_ref = int(request.json['videoID'])
     alert = models.Alert(title=title, text=text, timestamp=timestamp, video_ref=video_ref)
     
     try:
@@ -127,6 +128,29 @@ def create_alert():
         abort(400)
 
     return jsonify(alert.serialize()), 201
+
+
+# This is a function to create the video object
+# It assumes that the video has already been uploaded to s3 by the raspberry pi
+@app.route("/api/video_upload", methods=['POST'])
+def create_video():
+    if not request.json or not 'timestamp' in request.json or not 'video' in request.json:
+        abort(400)
+
+    timestamp = request.json['timestamp']
+    video = request.json['video']
+    video = models.Video(video=video, timestamp=timestamp)
+    
+    try:
+        db.session.add(alert)
+        db.session.commit()
+    except:
+        db.session.rollback()
+        abort(400)
+
+
+
+    return jsonify({"success":True}), 201
 
 
 # This needs to be the last line

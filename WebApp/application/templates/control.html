@@ -49,21 +49,58 @@
 	</body>
 </html>
 
+
 <script type="text/javascript">
-	$(document).keypress(function(e){
-		keys = [115,119,100,97,32]
+
+/*
+w (ASCII: 119, Keycode: 87) - forward 
+a (ASCII: 97, Keycode: 65) - forward left
+d (ASCII: 100, Keycode: 68) - forward right
+z (ASCII: 122, Keycode: 90) - back left
+c (ASCII: 99, Keycode: 67) - back right
+s (ASCII: 115, Keycode: 83) - back
+space (ASCII: 32, Keycode: 32) - stop
+*/
+
+	// $(document).keypress(function(e){
+	// 	keys = [115,119,100,97,32,122,99]
+	// 	key_letters = ['s', 'w', 'd', 'a', ' ', 'z', 'c']
+	// 	if(keys.indexOf(e.which) > -1) {
+	// 		console.log(key_letters[keys.indexOf(e.which)]);
+	// 		// console.log(e.which);
+	// 		// runCommand(e.which);
+	// 		runCommand(key_letters[keys.indexOf(e.which)]);
+	// 	}
+	// });
+
+	document.addEventListener("keydown", keyDownSignal, false);
+	document.addEventListener("keyup", keyUpSignal, false);
+
+	function keyDownSignal(e){
+		keys = [83,87,68,65,32,90,67]
+		key_letters = ['s', 'w', 'd', 'a', ' ', 'z', 'c']
 		if(keys.indexOf(e.which) > -1) {
-			console.log(e.which);
-			runCommand(e.which);
+			console.log("Down - ", key_letters[keys.indexOf(e.which)]);
+			runCommand(key_letters[keys.indexOf(e.which)]);
 		}
-	});
+	}
+
+	function keyUpSignal(e){
+		keys = [83,87,68,65,32,90,67]
+		key_letters = ['s', 'w', 'd', 'a', ' ', 'z', 'c']
+		if(keys.indexOf(e.which) > -1) {
+			console.log("Up - space");
+			runCommand(' ');
+		}
+	}
 
 	function runCommand(op) {
+		console.log("here")
 		$.ajax({
-			type: "POST",
-			url: "/command",
+			type: "GET",
+			url: "http://128.197.180.218:5000/command",
 			data: {"op": op},
-			dataType: 'text',
+			dataType: 'json',
 		});
 	}
 </script>

@@ -134,8 +134,17 @@ def create_alert():
 # It assumes that the video has already been uploaded to s3 by the raspberry pi
 @app.route("/api/video_upload", methods=['POST'])
 def create_video():
-    if not request.json or not 'timestamp' in request.json or not 'video' in request.json:
-        abort(400)
+
+    # if not request.json or not 'timestamp' in request.json or not 'video' in request.json:
+        # abort(400)
+    if not request.json:
+        return jsonify({"success":False, "Reason":"No json present"}), 400
+
+    if not 'timestamp' in request.json:
+        return jsonify({"success":False, "Reason":"No timestamp present"}), 400
+
+    if not 'video' in request.json:
+        return jsonify({"success":False, "Reason":"No video present"}), 400
 
     timestamp = request.json['timestamp']
     video = request.json['video']
@@ -150,7 +159,7 @@ def create_video():
 
 
 
-    return jsonify({"success":True}), 201
+    return jsonify({"success":True, "id":video.id}), 201
 
 
 # This needs to be the last line

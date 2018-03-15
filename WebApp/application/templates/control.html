@@ -38,11 +38,11 @@
 			</div>
 			<div class="row" style="margin-left:10px; margin-right:10px; text-align:center">
 				<div class="col-md-12">
-					<button class="btn btn-primary" onclick="runCommand(119)"><i style="font-size:24px" class="fa">&#xf062;</i></button>
-					<button class="btn btn-primary" onclick="runCommand(97)"><i style="font-size:24px" class="fa">&#xf060;</i></button>
+					<button class="btn btn-primary" onclick="runCommand(87)"><i style="font-size:24px" class="fa">&#xf062;</i></button>
+					<button class="btn btn-primary" onclick="runCommand(65)"><i style="font-size:24px" class="fa">&#xf060;</i></button>
 					<button class="btn btn-primary" onclick="runCommand(32)"><i style="font-size:24px" class="fa">&#xf0c8;</i></button>
-					<button class="btn btn-primary" onclick="runCommand(100)"><i style="font-size:24px" class="fa">&#xf061;</i></button>
-					<button class="btn btn-primary" onclick="runCommand(115)"><i style="font-size:24px" class="fa">&#xf063;</i></button>
+					<button class="btn btn-primary" onclick="runCommand(68)"><i style="font-size:24px" class="fa">&#xf061;</i></button>
+					<button class="btn btn-primary" onclick="runCommand(83)"><i style="font-size:24px" class="fa">&#xf063;</i></button>
 				</div>
 			</div>
 		</div>
@@ -73,8 +73,10 @@ space (ASCII: 32, Keycode: 32) - stop
 	// 	}
 	// });
 
-	document.addEventListener("keydown", keyDownSignal, false);
-	document.addEventListener("keyup", keyUpSignal, false);
+	window.onload = function(){
+		document.addEventListener("keydown", keyDownSignal, false);
+		document.addEventListener("keyup", keyUpSignal, false);
+	}
 
 	function keyDownSignal(e){
 		keys = [83,87,68,65,32,90,67]

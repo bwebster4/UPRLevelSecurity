@@ -11,7 +11,7 @@ application = app
 application.debug=True
 app.secret_key = 'super secret key'
 
-VIDEO_FORMAT = ".mp4"
+# VIDEO_FORMAT = ".mp4"
 
 #-------------------------------------------LOGIN RELATED WORK------------------------------------------
 
@@ -89,15 +89,15 @@ def download_video(video_id):
     video = models.Video.query.filter_by(id=video_id).first()
     s3 = boto3.resource('s3')
     download_folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-    local_filename = video.video + "_temp_local" + VIDEO_FORMAT
+    local_filename = video.video
 
     try:
-        s3.Bucket(S3_BUCKET_NAME).download_file(video.video + VIDEO_FORMAT, download_folder + local_filename)
+        s3.Bucket(S3_BUCKET_NAME).download_file(video.video, download_folder + local_filename)
         # s3.download_file(S3_BUCKET_NAME, video.video + VIDEO_FORMAT, download_folder + local_filename)
     except:
         raise
             
-    return send_from_directory(directory=download_folder, filename=local_filename)
+    return send_from_directory(directory=download_folder, filename=local_filename, as_attachment=True)
 
 
 #Route for the full records page
@@ -151,11 +151,11 @@ def create_video():
     video = models.Video(video=video, timestamp=timestamp)
     
     try:
-        db.session.add(alert)
+        db.session.add(video)
         db.session.commit()
     except:
         db.session.rollback()
-        abort(400)
+        return jsonify({"success":False, "Reason":"could not create db object"}), 400
 
 
 

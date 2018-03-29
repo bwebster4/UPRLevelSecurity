@@ -60,6 +60,7 @@ z (ASCII: 122, Keycode: 90) - back left
 c (ASCII: 99, Keycode: 67) - back right
 s (ASCII: 115, Keycode: 83) - back
 space (ASCII: 32, Keycode: 32) - stop
+escape (Keycode: 27) - stop remote control
 */
 
 	// $(document).keypress(function(e){
@@ -79,8 +80,8 @@ space (ASCII: 32, Keycode: 32) - stop
 	}
 
 	function keyDownSignal(e){
-		keys = [83,87,68,65,32,90,67]
-		key_letters = ['s', 'w', 'd', 'a', ' ', 'z', 'c']
+		keys = [83,87,68,65,32,90,67, 27]
+		key_letters = ['s', 'w', 'd', 'a', ' ', 'z', 'c', '27']
 		if(keys.indexOf(e.which) > -1) {
 			console.log("Down - ", key_letters[keys.indexOf(e.which)]);
 			runCommand(key_letters[keys.indexOf(e.which)]);
@@ -89,7 +90,6 @@ space (ASCII: 32, Keycode: 32) - stop
 
 	function keyUpSignal(e){
 		keys = [83,87,68,65,32,90,67]
-		key_letters = ['s', 'w', 'd', 'a', ' ', 'z', 'c']
 		if(keys.indexOf(e.which) > -1) {
 			console.log("Up - space");
 			runCommand(' ');
@@ -100,7 +100,7 @@ space (ASCII: 32, Keycode: 32) - stop
 		console.log("here")
 		$.ajax({
 			type: "GET",
-			url: "http://128.197.180.218:5000/command",
+			url: "http://128.197.180.233:5000/command",
 			data: {"op": op},
 			dataType: 'json',
 		});

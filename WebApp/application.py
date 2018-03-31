@@ -117,7 +117,11 @@ def create_alert():
     title = request.json['title']
     text = request.json['text']
     timestamp = request.json['time']
-    video_ref = int(request.json['videoID'])
+    try:
+        video_ref = int(request.json['videoID'])
+    except:
+        video_ref = None
+    
     alert = models.Alert(title=title, text=text, timestamp=timestamp, video_ref=video_ref)
     
     try:

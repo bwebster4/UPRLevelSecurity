@@ -36,7 +36,11 @@
 							{% for alert in alerts | reverse %}
 							<li style='padding-bottom: 5px; padding-top: 5px; padding-left: 5px'>ALERT - {{alert.title}}: {{alert.text}}</li>
 							<li style='padding-bottom: 5px; padding-top: 5px; padding-left: 5px'>TIMESTAMP: {{alert.timestamp}}</li>
+							{% if alert.video_ref != None %}
 							<li style='padding-bottom: 5px; padding-left: 5px'><a href="{{ url_for('download_video',video_id=alert.video_ref)}}">Download Video</a></li>
+							{% else %}
+							<li style='padding-bottom: 5px; padding-top: 5px; padding-left: 5px'>No associated video</li>
+							{% endif %}
 							{% endfor %}
 						</ul>
 					</div>
@@ -70,7 +74,11 @@
 		height: 480px;
 		margin-bottom: 5px;
 	}
+	
 	li:nth-child(6n) { background: #d3d3d3; }
 	li:nth-child(6n-1) { background: #d3d3d3; }
 	li:nth-child(6n-2) { background: #d3d3d3; }
+	
+
+	/*li:nth-child(odd){ background: #d3d3d3; }*/
 </style>

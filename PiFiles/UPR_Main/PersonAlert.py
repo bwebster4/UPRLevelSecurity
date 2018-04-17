@@ -10,8 +10,8 @@ from datetime import datetime
 SERVER_URL = "http://uprlevelsecurity-flask.us-east-1.elasticbeanstalk.com"
 
 S3_BUCKET_NAME = 'upr-level-security-videostorage'
-AWS_ACCESS_KEY='AKIAJB3FPOUEBYT2UTTA'
-AWS_SECRET_KEY='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'
+AWS_ACCESS_KEY=''
+AWS_SECRET_KEY=''
 
 def sendAlert(title, text, videoID):
     time = datetime.now().isoformat()

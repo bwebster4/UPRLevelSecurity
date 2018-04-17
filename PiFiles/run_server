@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source /home/pi/.profile &>> /tmp/serverinfo.txt
+echo "source" >> /tmp/rc.runserver.txt
+
+workon cv &>> /tmp/serverinfo.txt
+echo "cv" >> /tmp/rc.runserver.txt
+
+cd /home/pi/Desktop/UPR_Main
+
+python /home/pi/Desktop/UPR_Main/main_v2.py &>> /tmp/serverinfo.txt &
+echo "python" >> /tmp/rc.runserver.txt
+
+
+exit 0

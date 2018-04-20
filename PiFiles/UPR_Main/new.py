@@ -1,22 +1,28 @@
 #!/usr/bin/env python3
 import serial
+import math
 from time import sleep
 from typing import Tuple
 import logging
 
+from gnssRun import approxDistAng, initialAngleDifference
+
+
 BAUD=115200
-STOP=b'1,0,0,0,0'
-OK_SIGNAL=b'<OK>'
+STOP=b'<0,0,0,0,1>'
+OK_SIGNAL=b'OK'
 arduino_port = '/dev/ttyACM1'
 gps_port = '/dev/ttyACM0'
 TO=0.1
 
+def degMin2deg(degrees, minutes):
+    return degrees + minutes / 60
 
 def getGpsPos() -> Tuple[str,str]:
     with serial.Serial(gps_port, BAUD, timeout=TO) as ser:
         N = ser.inWaiting()
         while N < 81:
-            print('waiting for first packet, bytes received',N, end='\r')
+            # print('waiting for first packet, bytes received',N)
             sleep(0.1)
             N = ser.inWaiting()
 
@@ -48,24 +54,38 @@ def getGpsPos() -> Tuple[str,str]:
                 continue
 
             # GPS fix OK
-            lat = line[3]+line[4]
-            lon = line[5]+line[6]
+            lat = degMin2deg(int(line[3][:2]), float(line[3][2:]))
+            if(line[4] == "S"):
+                lat *= -1
 
-            return lat,lon
+            lon = degMin2deg(int(line[5][:3]), float(line[5][3:]))
+            if(line[6] == "W"):
+                lon *= -1
+
+            # lat = line[3]+line[4]
+            # lon = line[5]+line[6]
+
+            return float(lat),float(lon)
 
 
-def startmove(azimuth:float):
+def startmove(azimuth:float, direction):
 
     with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
-        ser.flushOutput()
-        cmd = '<0,{},r,0,0>'.format(azimuth).encode('ascii')
+        # ser.flushOutput()
+        cmd = '<0,{},{},0,0>'.format(azimuth, direction).encode('ascii')
         ser.write(cmd)
         sleep(.1)
+
         # validate move command
         buf = ser.readline().strip()
-        while buf and buf!=OK_SIGNAL:
-            ser.write(cmd)
+        print(buf)
+
+        while OK_SIGNAL not in buf:
+            print(buf)
+            # ser.write(cmd)
+            # ser.flushInput()
             sleep(.1)
+
             buf = ser.readline().strip()
 
         # if buf != cmd:
@@ -81,50 +101,69 @@ def stopmove():
 		ser.write(STOP) # stopmoving
 
 
-def checkmode():
-    with open('mode.txt','r') as f:
-        stat = f.readline().lower()
-        if stat.startswith('a'): # autonomous
-            pass
-        elif stat.startswith('r'): # manual remote control
-            stopmove()
-            # tell Arduino to go to manual mode
-            manualmove()
-        else:
-            stopmove()
-            raise ValueError('unexpected command {}'.format(stat))
-
 def waitForArduino():
     with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
-        output = ser.readline().strip()
-        while output != b'Calibrated':
-            if len(output) > 1:
+        output = ser.readline().decode('ascii').strip()
+        while output != 'Calibrated':
+            if output:
                 print(output)
-                ser.flushOutput()
-                sleep(0.2)
-                output = ser.readline().strip()
+                # ser.flushOutput()
+            sleep(0.2)
+            output = ser.readline().decode('ascii').strip()
+
+
+
+def checkForObjects(totalAngle):
+
+    with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
+        output = ser.readline().decode('ascii').strip()
+        print(output)
+        if output.startswith('<') and 'OBJ' in output and output.endswith('>'):
+            output = output[1:len(output) - 2]
+            angle = float(output.split(',')[1])
+            sleep(0.1)
+            ser.write(b'<OK>')
+            sleep(0.1)
+            # ser.flushOutput()
+            turnAngle, direction = initialAngleDifference(angle, totalAngle)
+
+            ser.close()
+            startmove(turnAngle, direction)
+
+
+
+def dist(y1,x1,y2,x2):
+    return math.sqrt((x2 - x1)**2 + (y2-y1)**2)
 
 if __name__ == '__main__':
 
 
     waitForArduino()
 
-    lat, lon = getGpsPos()
+    # lat, lon = getGpsPos()
+    lat, lon = (0.0, 0.0)
 
-    latgoal=(lat + 0.00000)
-    longoal=(lon + 0.00009)
+    latgoal = lat + 0.00000
+    longoal = lon + 0.00009
 
-    for latg, long in zip(latgoal,longoal):
+    # for latgoal, longoal in zip(latgoals,longoals):
+    currentAngle = 0
 
-        lat,lon = getGpsPos()
-        #az = calcAzimuth(lat,lon,latg,long)
+    distance, totalAngle = approxDistAng(latgoal, longoal, lat, lon)
+    turnAngle, direction = initialAngleDifference(currentAngle, totalAngle)
 
-        az = 35 #FIXME
-        startmove(az)
-       # while dist(lat,lon,latg,long) > eps:
-       #     sleep(0.1)
-       #     lat,lon = getGpsPos()
+    print("Starting Movement")
 
-        sleep(2.)  #FIXME
-        stopmove()
+    startmove(turnAngle, direction)
+    while dist(lat,lon,latgoal,longoal) > 0.000015:
+        sleep(0.1)
+        # lat,lon = getGpsPos()
+
+        print("Pos: {}, {}".format(lat, lon))
+
+        checkForObjects(totalAngle)
+
+    print("At Destination")
+
+    stopmove()
 

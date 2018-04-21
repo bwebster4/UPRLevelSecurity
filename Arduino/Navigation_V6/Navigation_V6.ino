@@ -96,7 +96,7 @@ double radToDeg(double radians){
 }
 
 float servoScan(){
-  Serial.println("Object detected");
+  //Serial.println("Object detected");
   int pos = 204.8;
   for(int i = 0; i < 13; i++){
     Dynamixel.move(1, pos);
@@ -110,7 +110,7 @@ float servoScan(){
     duration[i] = pulseIn(echoPin, HIGH);
     // Calculating the distance 
     distance[i] = duration[i]*0.034/2;
-    Serial.print("Distance " + String(i) + ": " + String(distance[i]) + "\n");
+    //Serial.print("Distance " + String(i) + ": " + String(distance[i]) + "\n");
     if(distance[i] > 150){
       empty[i] = true;
     }
@@ -194,7 +194,7 @@ void avoidObject(float turnAngle){
 //    }
 //  }
   esc.write(90);
-  Serial.println("object avoided");
+  //Serial.println("object avoided");
   sendDeltaAngle();
   getParameters();
 }
@@ -236,12 +236,12 @@ void lookForGauge()
       centeredStatus = Serial.readString();
       while(centeredStatus != "Proceed"){
         savedStatus = centeredStatus;
-        Serial.println(centeredStatus);
+        //Serial.println(centeredStatus);
         //if(Serial.available()){
         centeredStatus = Serial.readString();//}
       }
       for(int i = 0; i < 10; i++ ){
-        Serial.println("Proceed");
+        //Serial.println("Proceed");
       }
       centeredStatus = savedStatus;
       //Handshake done
@@ -266,12 +266,12 @@ void lookForGauge()
     centeredStatus = Serial.readString();
     while(centeredStatus != "Proceed"){
       savedStatus = centeredStatus;
-      Serial.println(centeredStatus);
+      //Serial.println(centeredStatus);
       //if(Serial.available()){
       centeredStatus = Serial.readString();//}
     }
     for(int i = 0; i < 10; i++ ){
-      Serial.println("Proceed");
+      //Serial.println("Proceed");
       
     }
 
@@ -311,7 +311,7 @@ void lookForGauge()
       esc.write(90);
       wheels.write(90); //not uploaded
       while(!Serial.available()){
-        Serial.println("Detect");
+        //Serial.println("Detect");
         delay(200);
       }
     
@@ -333,7 +333,7 @@ void lookForGauge()
     }
     else{
       esc.write(90);
-      Serial.println("error");
+      //Serial.println("error");
     }
   }
   
@@ -346,7 +346,7 @@ void lookForGauge()
   
   esc.write(90);
   while(!Serial.available()){
-    Serial.println("Detect");
+    //Serial.println("Detect");
     delay(200);
   }
   getParameters();
@@ -384,7 +384,7 @@ void straightRobot(){
       return; 
     }
     else{
-      Serial.println("Im goin straight");
+      //Serial.println("Im goin straight");
       esc.write(70);
       delay(200);
     }
@@ -417,7 +417,7 @@ void turnRobot(){
       delay(200);
     }
     else{
-      Serial.println("In the else section");
+      //Serial.println("In the else section");
       float delta;
       if((currentAngle - turnAngle) < -180 && turnAngle > 0){
         delta = currentAngle + 360 - turnAngle;
@@ -630,14 +630,14 @@ void getParameters(){
   String parameters;
   int i1,i2,i3,i4;
   while(!(Serial.available())){
-    Serial.println("Waiting for Parameters");
+    //Serial.println("Waiting for Parameters");
     delay(200);
     }
     int OK = 0;
     int bracket1;
     while(OK!=2){
       parameters = Serial.readString();
-      Serial.println(parameters);
+      //Serial.println(parameters);
       if(parameters.indexOf("<") > -1){
         bracket1 = parameters.indexOf("<");
         OK++;
@@ -676,12 +676,12 @@ void getParameters(){
 
    //set kill flag
   if((parameters.substring(i4 + 1,i4+2) == "1")){
-    Serial.println("fully dead");
+    //Serial.println("fully dead");
     killFlag = true;
     kill();
   }
   else{
-    Serial.println("shouldn't be dead");
+    //Serial.println("shouldn't be dead");
     killFlag = false;
   }
 
@@ -697,7 +697,7 @@ void getParameters(){
   //set arrived flag
   if((parameters.substring(bracket1+1, i1) == "1")){
       arrived = true;
-      Serial.println("At Gauge");
+      //Serial.println("At Gauge");
       Dynamixel.move(2,200);
       esc.write(90);
       lookForGauge();
@@ -711,8 +711,8 @@ void getParameters(){
   //find temp angle 
   float deltaAngle = parameters.substring(i1 + 1, i2).toFloat();
 
-  Serial.println(currentAngle);
-  Serial.println(deltaAngle);
+  //Serial.println(currentAngle);
+  //Serial.println(deltaAngle);
   
   //find turn direction
 
@@ -724,20 +724,20 @@ void getParameters(){
  
   calculateTurnAngle(turnDir, deltaAngle);
 
-  Serial.println(turnAngle);
+  //Serial.println(turnAngle);
 
 
 
-  Serial.println(String(arrived));
-  Serial.println(deltaAngle);
-  Serial.println(turnDir);
-  Serial.println(String(remoteControl));
-  Serial.println(String(killFlag));
+  //Serial.println(String(arrived));
+  //Serial.println(deltaAngle);
+  //Serial.println(turnDir);
+  //Serial.println(String(remoteControl));
+  //Serial.println(String(killFlag));
   return;
 }
 
 void kill(){
-  Serial.println("kill");
+  //Serial.println("kill");
   esc.write(90);
   wheels.write(90);
   Dynamixel.move(1, 512);
@@ -761,12 +761,12 @@ void remoteControlOperation(){
       
       if(byte == FORWARD && esc.read() < 90){
         wheels.write(90);
-        Serial.print("Forward \n");
+        //Serial.print("Forward \n");
         byte = 0;
       }
       
       else if(byte == FORWARD && esc.read() >= 90){
-        Serial.print("Forward \n");
+        //Serial.print("Forward \n");
         while(speed > 90){
           speed -= 5;
           esc.write(speed);
@@ -790,12 +790,12 @@ void remoteControlOperation(){
       
     if(byte == BACKWARD && esc.read() > 90){
       wheels.write(90);
-      Serial.print("Backward \n");
+      //Serial.print("Backward \n");
       byte = 0;
     }
     
     else if(byte == BACKWARD && esc.read() <= 90){
-      Serial.print("Backward \n");
+      //Serial.print("Backward \n");
       while(speed < 90){
           speed += 5;
           esc.write(speed);
@@ -819,12 +819,12 @@ void remoteControlOperation(){
       
     if(byte == FORWARDLEFT && esc.read() < 90){
       wheels.write(135);
-      Serial.print("Forward-Left \n");
+      //Serial.print("Forward-Left \n");
       byte = 0;
     }
     
     else if(byte == FORWARDLEFT && esc.read() >= 90){
-      Serial.print("Forward-Left \n");
+      //Serial.print("Forward-Left \n");
       while(speed > 90){
         speed -= 5;
         esc.write(speed);
@@ -847,12 +847,12 @@ void remoteControlOperation(){
       
       if(byte == FORWARDRIGHT && esc.read() < 90){
         wheels.write(45);
-        Serial.print("Forward-Right \n");
+        //Serial.print("Forward-Right \n");
         byte = 0;
       }
       
       else if(byte == FORWARDRIGHT && esc.read() >= 90){
-        Serial.print("Forward-Right \n");
+        //Serial.print("Forward-Right \n");
         while(speed > 90){
           speed -= 5;
           esc.write(speed);
@@ -876,12 +876,12 @@ void remoteControlOperation(){
       
     if(byte == BACKLEFT && esc.read() > 90){
       wheels.write(135);
-      Serial.print("Backward-Left \n");
+      //Serial.print("Backward-Left \n");
       byte = 0;
     }
     
     else if(byte == BACKLEFT && esc.read() <= 90){
-      Serial.print("Backward-Left \n");
+      //Serial.print("Backward-Left \n");
       while(speed < 90){
           speed += 5;
           esc.write(speed);
@@ -904,12 +904,12 @@ void remoteControlOperation(){
       
     if(byte == BACKRIGHT && esc.read() > 90){
       wheels.write(45);
-      Serial.print("Backward-Right \n");
+      //Serial.print("Backward-Right \n");
       byte = 0;
     }
     
     else if(byte == BACKRIGHT && esc.read() <= 90){
-      Serial.print("Backward-Right \n");
+      //Serial.print("Backward-Right \n");
       while(speed < 90){
           speed += 5;
           esc.write(speed);
@@ -928,7 +928,7 @@ void remoteControlOperation(){
     }    
 
       if(byte == STOP){        
-        Serial.print("Stop \n");
+        //Serial.print("Stop \n");
         if(speed < 90){
         while(speed < 90){
           speed += 5;

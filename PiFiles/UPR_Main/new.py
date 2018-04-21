@@ -18,7 +18,7 @@ TO=0.1
 def degMin2deg(degrees, minutes):
     return degrees + minutes / 60
 
-def getGpsPos() -> Tuple[str,str]:
+def getGpsPos():
     with serial.Serial(gps_port, BAUD, timeout=TO) as ser:
         N = ser.inWaiting()
         while N < 81:
@@ -69,24 +69,26 @@ def getGpsPos() -> Tuple[str,str]:
 
 
 def startmove(azimuth:float, direction):
+    cmd = '<0,{},{},0,0>'.format(azimuth, direction).encode('ascii')
+    sendComms(cmd, 4)
 
-    with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
-        # ser.flushOutput()
-        cmd = '<0,{},{},0,0>'.format(azimuth, direction).encode('ascii')
-        ser.write(cmd)
-        sleep(.1)
+    # with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
+    #     # ser.flushOutput()
+    #     cmd = '<0,{},{},0,0>'.format(azimuth, direction).encode('ascii')
+    #     ser.write(cmd)
+    #     sleep(.1)
 
-        # validate move command
-        buf = ser.readline().strip()
-        print(buf)
+    #     # validate move command
+    #     buf = ser.readline().strip()
+    #     print(buf)
 
-        while OK_SIGNAL not in buf:
-            print(buf)
-            # ser.write(cmd)
-            # ser.flushInput()
-            sleep(.1)
+    #     while OK_SIGNAL not in buf:
+    #         print(buf)
+    #         # ser.write(cmd)
+    #         # ser.flushInput()
+    #         sleep(.1)
 
-            buf = ser.readline().strip()
+    #         buf = ser.readline().strip()
 
         # if buf != cmd:
         #     logging.error('Arduino direction to move validation failed, buffer: {}'.format(buf))
@@ -97,8 +99,9 @@ def startmove(azimuth:float, direction):
 
 
 def stopmove():
-	with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
-		ser.write(STOP) # stopmoving
+    sendComms(STOP,4)
+	# with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
+	# 	ser.write(STOP) # stopmoving
 
 
 def waitForArduino():
@@ -115,28 +118,58 @@ def waitForArduino():
 
 def checkForObjects(totalAngle):
 
+    # with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
+    #     output = ser.readline().decode('ascii').strip()
+    #     print(output)
+    #     if output.startswith('<') and 'OBJ' in output and output.endswith('>'):
+    #         output = output[1:len(output) - 2]
+    #         angle = float(output.split(',')[1])
+    #         sleep(0.1)
+    #         ser.write(b'<OK>')
+    #         sleep(0.1)
+    #         # ser.flushOutput()
+    #         turnAngle, direction = initialAngleDifference(angle, totalAngle)
+
+    #         ser.close()
+    #         startmove(turnAngle, direction)
+    output = receiveComms(12)
+    if output == 0:
+        return
+    flag = output.split(',')[0]
+    if flag == 'OBJ':
+        angle = float(output.split(',')[1])
+        turnAngle, direction = initialAngleDifference(angle, totalAngle)
+        startmove(turnAngle, direction)
+
+def receiveComms(buffLen):
     with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
+        N = ser.inWaiting()
+        if N >= buffLen:
+            output = ser.readline().decode('ascii').strip()
+            print(output)
+            if output.startswith('<') and output.endswith('>'):
+                output = output[1:len(output) - 2]
+                ser.write(b'<OK>')
+            return output
+    return 0
+
+def sendComms(cmd, buffLen):
+    output = ''
+    with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
+        ser.write(cmd)
+        N = ser.inWaiting()
+        while N < buffLen:
+            N = ser.inWaiting()
         output = ser.readline().decode('ascii').strip()
         print(output)
-        if output.startswith('<') and 'OBJ' in output and output.endswith('>'):
-            output = output[1:len(output) - 2]
-            angle = float(output.split(',')[1])
-            sleep(0.1)
-            ser.write(b'<OK>')
-            sleep(0.1)
-            # ser.flushOutput()
-            turnAngle, direction = initialAngleDifference(angle, totalAngle)
-
-            ser.close()
-            startmove(turnAngle, direction)
-
+    if OK_SIGNAL not in output:
+        sendComms(cmd, buffLen)
 
 
 def dist(y1,x1,y2,x2):
     return math.sqrt((x2 - x1)**2 + (y2-y1)**2)
 
 if __name__ == '__main__':
-
 
     waitForArduino()
 

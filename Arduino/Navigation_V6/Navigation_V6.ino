@@ -171,7 +171,7 @@ float servoScan(){
 
 void avoidObject(float turnAngle){
   delay(1000);
-  while(!checkAngle(turnAngle)){
+  if(!checkAngle(turnAngle)){
     turnRobot();
   }
   esc.write(90);
@@ -519,7 +519,7 @@ bool checkAngle(float turnAngle){
   mpu.resetFIFO();
 // if programming failed, don't try to do anything
     if (!dmpReady){ 
-//      Serial.println("SOMETHING'S WRONG");
+      Serial.println("SOMETHING'S WRONG");
       return;
     }
 
@@ -539,7 +539,7 @@ bool checkAngle(float turnAngle){
     if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
         // reset so we can continue cleanly
         mpu.resetFIFO();
-//        Serial.println(F("FIFO overflow!"));
+        Serial.println("FIFO overflow!");
 
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
     } else if (mpuIntStatus & 0x02) {
@@ -570,7 +570,7 @@ bool checkAngle(float turnAngle){
             currentAngle = euler[0] *180/M_PI;
             
             if((currentAngle > turnAngle + 5) || (currentAngle < turnAngle - 5) ){ 
-              Serial.println("<TUR,currentAngle>");
+              Serial.println("<TUR," + String(currentAngle,2) + "," + String(turnAngle,2)+  ">");
               //Serial.println("Current Angle : " + String(currentAngle));
               //Serial.println("Goal angle = " + String(turnAngle) + " and current angle = " + String((euler[0] * 180/M_PI))); 
             }

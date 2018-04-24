@@ -622,7 +622,7 @@ void sendDeltaAngle(){
     }
     
     Serial.println("<OBJ," + stringAngle + ">");
-    while(!Serial.available()){};
+//    while(!Serial.available()){};
     OK = Serial.readString();
   }
   return;

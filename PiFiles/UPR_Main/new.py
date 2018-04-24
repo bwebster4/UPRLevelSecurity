@@ -10,10 +10,20 @@ from gnssRun import approxDistAng, initialAngleDifference
 
 BAUD=115200
 STOP=b'<0,0,0,0,1>'
-OK_SIGNAL=b'OK'
+OK_SIGNAL='OK'
 arduino_port = '/dev/ttyACM1'
 gps_port = '/dev/ttyACM0'
 TO=0.1
+
+with serial.Serial('/dev/ttyACM1', BAUD, timeout=TO) as ser:
+    N = ser.inWaiting()
+    while N < 10:
+        sleep(0.1)
+        N = ser.inWaiting()
+    output = ser.readline().decode('ascii').strip()
+    if output.startswith('$'):
+        gps_port = '/dev/ttyACM1'
+        arduino_port = '/dev/ttyACM0'
 
 def degMin2deg(degrees, minutes):
     return degrees + minutes / 60
@@ -69,6 +79,7 @@ def getGpsPos():
 
 
 def startmove(azimuth:float, direction):
+    print("In Startmove, {}, {}".format(azimuth,direction))
     cmd = '<0,{},{},0,0>'.format(azimuth, direction).encode('ascii')
     sendComms(cmd, 4)
 
@@ -99,6 +110,7 @@ def startmove(azimuth:float, direction):
 
 
 def stopmove():
+    print("In stopmove")
     sendComms(STOP,4)
 	# with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
 	# 	ser.write(STOP) # stopmoving
@@ -117,6 +129,7 @@ def waitForArduino():
 
 
 def checkForObjects(totalAngle):
+    print("In checkForObjects")
 
     # with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
     #     output = ser.readline().decode('ascii').strip()
@@ -132,7 +145,9 @@ def checkForObjects(totalAngle):
 
     #         ser.close()
     #         startmove(turnAngle, direction)
-    output = receiveComms(12)
+    output = receiveComms(14)
+    sleep(1)
+    print(str(output))
     if output == 0:
         return
     flag = output.split(',')[0]
@@ -142,18 +157,33 @@ def checkForObjects(totalAngle):
         startmove(turnAngle, direction)
 
 def receiveComms(buffLen):
+    print("In receiveComms")
     with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
+        # output = ser.readline().decode('ascii').strip()
+        # return output
         N = ser.inWaiting()
-        if N >= buffLen:
-            output = ser.readline().decode('ascii').strip()
-            print(output)
-            if output.startswith('<') and output.endswith('>'):
-                output = output[1:len(output) - 2]
-                ser.write(b'<OK>')
-            return output
+        print("Receive comms buffer = {}".format(N))
+        # if N >= buffLen:
+        while N < buffLen:
+            sleep(0.2)
+            N = ser.inWaiting()
+            print("Receive comms buffer = {}".format(N))
+
+        output = ser.readline().decode('ascii').strip()
+        print(output)
+        if output.startswith('<') and output.endswith('>'):
+            output = output[1:len(output) - 2]
+            flag = output.split(',')[0]
+            if flag == "OBJ":
+                sleep(1)
+                ser.reset_output_buffer()
+                ser.write('<OK>'.encode('ascii'))
+                print("Should have sent OK")
+        return output
     return 0
 
 def sendComms(cmd, buffLen):
+    print("In sendComms")
     output = ''
     with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
         ser.write(cmd)
@@ -189,7 +219,7 @@ if __name__ == '__main__':
 
     startmove(turnAngle, direction)
     while dist(lat,lon,latgoal,longoal) > 0.000015:
-        sleep(0.1)
+        sleep(0.5)
         # lat,lon = getGpsPos()
 
         print("Pos: {}, {}".format(lat, lon))

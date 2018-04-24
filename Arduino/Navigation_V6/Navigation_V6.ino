@@ -170,7 +170,7 @@ float servoScan(){
 }
 
 void avoidObject(float turnAngle){
-  delay(1000);
+//  delay(1000);
   if(!checkAngle(turnAngle)){
     turnRobot();
   }
@@ -400,8 +400,9 @@ void turnRobot(){
       getParameters();
       return;
     }
-    if(servoRun() < 75){
+    if(servoRun() < 50){
       esc.write(90);
+//      Serial.println("turnRobot>servoRun");
       return;
     }
     if(turnDir == "l" || turnDir ==  "L"){
@@ -416,25 +417,22 @@ void turnRobot(){
       esc.write(70);
       delay(200);
     }
+    //Serial.println("In the else section");
+    float delta;
+    if((currentAngle - turnAngle) < -180 && turnAngle > 0){
+      delta = currentAngle + 360 - turnAngle;
+    }
+    else if((currentAngle - turnAngle) > 180 && turnAngle < 0){
+      delta = currentAngle - 360 - turnAngle;
+    }
     else{
-      //Serial.println("In the else section");
-      float delta;
-      if((currentAngle - turnAngle) < -180 && turnAngle > 0){
-        delta = currentAngle + 360 - turnAngle;
-      }
-      else if((currentAngle - turnAngle) > 180 && turnAngle < 0){
-        delta = currentAngle - 360 - turnAngle;
-      }
-      else{
-        delta = currentAngle - turnAngle;
-      }
-      if(delta > 0){
-        turnDir = "l";
-      }
-      else{
-        turnDir = "r";
-      }
-  
+      delta = currentAngle - turnAngle;
+    }
+    if(delta > 0){
+      turnDir = "l";
+    }
+    else{
+      turnDir = "r";
     }
   }
 }
@@ -519,13 +517,13 @@ bool checkAngle(float turnAngle){
   mpu.resetFIFO();
 // if programming failed, don't try to do anything
     if (!dmpReady){ 
-      Serial.println("SOMETHING'S WRONG");
+      //Serial.println("SOMETHING'S WRONG");
       return;
     }
 
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
-//        Serial.println("you're stuck");
+        //Serial.println("you're stuck");
       }
 
     // reset interrupt flag and get INT_STATUS byte
@@ -539,7 +537,7 @@ bool checkAngle(float turnAngle){
     if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
         // reset so we can continue cleanly
         mpu.resetFIFO();
-        Serial.println("FIFO overflow!");
+//        Serial.println("FIFO overflow!");
 
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
     } else if (mpuIntStatus & 0x02) {
@@ -547,7 +545,7 @@ bool checkAngle(float turnAngle){
         count =0;
         while (fifoCount < packetSize){ 
           fifoCount = mpu.getFIFOCount();
-//          Serial.println("Stuck");
+          //Serial.println("Stuck");
           count++;
           if(count>100){
             mpu.resetFIFO();
@@ -568,8 +566,16 @@ bool checkAngle(float turnAngle){
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetEuler(euler, &q);
             currentAngle = euler[0] *180/M_PI;
+           
+            int diff1 = abs(currentAngle - turnAngle);
+            int diff2 = abs(currentAngle - 360 - turnAngle);
+            int diff3 = abs(currentAngle + 360 - turnAngle);
+
+            int diff = (diff1 > diff2) ? diff2 : diff1;
+            diff = (diff > diff3) ? diff3 : diff;
             
-            if((currentAngle > turnAngle + 5) || (currentAngle < turnAngle - 5) ){ 
+            if(diff > 5){
+//            if((currentAngle > turnAngle + 5) || (currentAngle < turnAngle - 5) ){ 
               Serial.println("<TUR," + String(currentAngle,2) + "," + String(turnAngle,2)+  ">");
               //Serial.println("Current Angle : " + String(currentAngle));
               //Serial.println("Goal angle = " + String(turnAngle) + " and current angle = " + String((euler[0] * 180/M_PI))); 
@@ -1067,16 +1073,19 @@ void setup() {
 // ================================================================
 
 void loop() {
+//  Serial.println("In Main Loop");
   if(Serial.available()){  
     getParameters();
   }
   if(servoRun() < 50){
     esc.write(90);
+//    Serial.println("going to ServoScan");
     turnAngle = servoScan();
-    delay(3000);
+    //delay(3000);
   }
   if(!(checkAngle(turnAngle))){
     turnRobot();
+    delay(200);
   }
   else{
     straightRobot();

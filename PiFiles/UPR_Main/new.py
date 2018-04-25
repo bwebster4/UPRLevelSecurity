@@ -163,23 +163,23 @@ def receiveComms(buffLen):
         # return output
         N = ser.inWaiting()
         print("Receive comms buffer = {}".format(N))
-        # if N >= buffLen:
-        while N < buffLen:
-            sleep(0.2)
-            N = ser.inWaiting()
-            print("Receive comms buffer = {}".format(N))
+        if N >= buffLen:
+        # while N < buffLen:
+            # sleep(0.2)
+            # N = ser.inWaiting()
+            # print("Receive comms buffer = {}".format(N))
 
-        output = ser.readline().decode('ascii').strip()
-        print(output)
-        if output.startswith('<') and output.endswith('>'):
-            output = output[1:len(output) - 2]
-            flag = output.split(',')[0]
-            if flag == "OBJ":
-                sleep(1)
-                ser.reset_output_buffer()
-                ser.write('<OK>'.encode('ascii'))
-                print("Should have sent OK")
-        return output
+	        output = ser.readline().decode('ascii').strip()
+	        print(output)
+	        if output.startswith('<') and output.endswith('>'):
+	            output = output[1:len(output) - 2]
+	            flag = output.split(',')[0]
+	            if flag == "OBJ":
+	                sleep(1)
+	                ser.reset_output_buffer()
+	                ser.write('<OK>'.encode('ascii'))
+	                print("Should have sent OK")
+	        return output
     return 0
 
 def sendComms(cmd, buffLen):

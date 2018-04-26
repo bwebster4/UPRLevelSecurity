@@ -400,11 +400,11 @@ void turnRobot(){
       getParameters();
       return;
     }
-    if(servoRun() < 50){
-      esc.write(90);
-//      Serial.println("turnRobot>servoRun");
-      return;
-    }
+//    if(servoRun() < 50){
+//      esc.write(90);
+////      Serial.println("turnRobot>servoRun");
+//      return;
+//    }
     if(turnDir == "l" || turnDir ==  "L"){
       Dynamixel.move(1,358.4);
       wheels.write(135);

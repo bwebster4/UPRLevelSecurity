@@ -409,13 +409,13 @@ void turnRobot(){
       Dynamixel.move(1,358.4);
       wheels.write(135);
       esc.write(70);
-      delay(200);
+      //delay(200);
     }
     else if(turnDir == "r" || turnDir ==  "R"){
       Dynamixel.move(1,665.6);
       wheels.write(45);
       esc.write(70);
-      delay(200);
+      //delay(200);
     }
     //Serial.println("In the else section");
     float delta;
@@ -434,6 +434,7 @@ void turnRobot(){
     else{
       turnDir = "r";
     }
+    delay(200);
   }
 }
 
@@ -523,7 +524,8 @@ bool checkAngle(float turnAngle){
 
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
-        //Serial.println("you're stuck");
+        
+//        Serial.println("mpuInterrupt: "+ String(mpuInterrupt) + "FIFOCount: "+ String(fifoCount));
       }
 
     // reset interrupt flag and get INT_STATUS byte
@@ -545,7 +547,7 @@ bool checkAngle(float turnAngle){
         count =0;
         while (fifoCount < packetSize){ 
           fifoCount = mpu.getFIFOCount();
-          //Serial.println("Stuck");
+//          Serial.println("Stuck");
           count++;
           if(count>100){
             mpu.resetFIFO();
@@ -581,14 +583,14 @@ bool checkAngle(float turnAngle){
               //Serial.println("Goal angle = " + String(turnAngle) + " and current angle = " + String((euler[0] * 180/M_PI))); 
             }
             else{
-                //Serial.println("You're going the right direction!");
+//                Serial.println("You're going the right direction!");
                 return true;
             }
         #endif
 
         // blink LED to indicate activity
-        blinkState = !blinkState;
-        digitalWrite(LED_PIN, blinkState);
+//        blinkState = !blinkState;
+//        digitalWrite(LED_PIN, blinkState);
 //        Serial.println("First false");
         return false;
     }

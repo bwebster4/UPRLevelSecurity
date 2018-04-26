@@ -2,6 +2,7 @@
 import serial
 import math
 from time import sleep
+import time
 from typing import Tuple
 import logging
 
@@ -12,7 +13,7 @@ BAUD=115200
 STOP=b'<0,0,0,0,1>'
 OK_SIGNAL='OK'
 arduino_port = '/dev/ttyACM1'
-gps_port = '/dev/ttyACM0'
+gps_port = '/dev/ttyACM2'
 TO=0.1
 
 with serial.Serial('/dev/ttyACM1', BAUD, timeout=TO) as ser:
@@ -23,7 +24,7 @@ with serial.Serial('/dev/ttyACM1', BAUD, timeout=TO) as ser:
     output = ser.readline().decode('ascii').strip()
     if output.startswith('$'):
         gps_port = '/dev/ttyACM1'
-        arduino_port = '/dev/ttyACM0'
+        arduino_port = '/dev/ttyACM2'
 
 def degMin2deg(degrees, minutes):
     return degrees + minutes / 60
@@ -78,7 +79,7 @@ def getGpsPos():
             return float(lat),float(lon)
 
 
-def startmove(azimuth:float, direction):
+def startmove(azimuth, direction):
     print("In Startmove, {}, {}".format(azimuth,direction))
     cmd = '<0,{},{},0,0>'.format(azimuth, direction).encode('ascii')
     sendComms(cmd, 4)
@@ -161,13 +162,16 @@ def receiveComms(buffLen):
     with serial.Serial(arduino_port, BAUD, timeout=TO) as ser:
         # output = ser.readline().decode('ascii').strip()
         # return output
-        # N = ser.inWaiting()
-        # print("Receive comms buffer = {}".format(N))
+        N = ser.inWaiting()
+        print("Receive comms buffer = {}".format(N))
         # if N >= buffLen:
-        # while N < buffLen:
-            # sleep(0.2)
-            # N = ser.inWaiting()
-            # print("Receive comms buffer = {}".format(N))
+        endTime = time.time() + 1
+        while N < buffLen:
+            if time.time() > endTime:
+                break
+            sleep(0.2)
+            N = ser.inWaiting()
+            print("Receive comms buffer = {}".format(N))
 
         output = ser.readline().decode('ascii').strip()
         print(output)
@@ -179,7 +183,7 @@ def receiveComms(buffLen):
                 ser.reset_output_buffer()
                 ser.write('<OK>'.encode('ascii'))
                 print("Should have sent OK")
-        return output
+            return output
     return 0
 
 def sendComms(cmd, buffLen):
@@ -203,8 +207,9 @@ if __name__ == '__main__':
 
     waitForArduino()
 
-    # lat, lon = getGpsPos()
-    lat, lon = (0.0, 0.0)
+    lat, lon = getGpsPos()
+    sleep(0.2)
+    # lat, lon = (0.0, 0.0)
 
     latgoal = lat + 0.00000
     longoal = lon + 0.00009
@@ -215,12 +220,15 @@ if __name__ == '__main__':
     distance, totalAngle = approxDistAng(latgoal, longoal, lat, lon)
     turnAngle, direction = initialAngleDifference(currentAngle, totalAngle)
 
+    if direction == ' ':
+        direction = 'r'
+
     print("Starting Movement")
 
     startmove(turnAngle, direction)
     while dist(lat,lon,latgoal,longoal) > 0.000015:
         sleep(0.5)
-        # lat,lon = getGpsPos()
+        lat,lon = getGpsPos()
 
         print("Pos: {}, {}".format(lat, lon))
 

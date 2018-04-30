@@ -211,30 +211,32 @@ if __name__ == '__main__':
     sleep(0.2)
     # lat, lon = (0.0, 0.0)
 
-    latgoal = lat + 0.00000
-    longoal = lon + 0.00009
+    # latgoal = lat + 0.00000
+    # longoal = lon + 0.00009
 
-    # for latgoal, longoal in zip(latgoals,longoals):
-    currentAngle = 0
+    for latgoal, longoal in ((lat + 0.00000, lon + 0.00009), (lat + 0.00002, lon + 0.00009)):
 
-    distance, totalAngle = approxDistAng(latgoal, longoal, lat, lon)
-    turnAngle, direction = initialAngleDifference(currentAngle, totalAngle)
+        # for latgoal, longoal in zip(latgoals,longoals):
+        currentAngle = 0
 
-    if direction == ' ':
-        direction = 'r'
+        distance, totalAngle = approxDistAng(latgoal, longoal, lat, lon)
+        turnAngle, direction = initialAngleDifference(currentAngle, totalAngle)
 
-    print("Starting Movement")
+        if direction == ' ':
+            direction = 'r'
 
-    startmove(turnAngle, direction)
-    while dist(lat,lon,latgoal,longoal) > 0.000015:
-        sleep(0.5)
-        lat,lon = getGpsPos()
+        print("Starting Movement")
 
-        print("Pos: {}, {}".format(lat, lon))
+        startmove(turnAngle, direction)
+        while dist(lat,lon,latgoal,longoal) > 0.000015:
+            sleep(0.5)
+            lat,lon = getGpsPos()
 
-        checkForObjects(totalAngle)
+            print("Pos: {}, {}".format(lat, lon))
 
-    print("At Destination")
+            checkForObjects(totalAngle)
 
-    stopmove()
+        print("At Destination")
+
+        stopmove()
 
